@@ -1,0 +1,29 @@
+---
+Name: villadina-theme
+---
+SilverStripe\View\SSViewer:
+  themes:
+    - 'villadina'
+    - '$public'
+    - '$default'
+
+SilverStripe\Control\Controller:
+  extensions:
+    - App\Extensions\ViteExtension
+
+SilverStripe\SiteConfig\SiteConfig:
+  extensions:
+    - App\Extensions\SiteConfigExtension
+
+SilverStripe\CMS\Model\SiteTree:
+  extensions:
+    - App\Extensions\ThemePageExtension
+
+# Allow SVG logo/icons as plain Files (sanitise uploads if editors are untrusted)
+SilverStripe\Assets\File:
+  allowed_extensions:
+    - svg
+
+App\Elements\GalleryElement:
+  extensions:
+    - App\Extensions\GalleryElementExtension

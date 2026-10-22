@@ -1,0 +1,17 @@
+/.graphql-generated/
+/public/_graphql/
+/silverstripe-cache/
+/.env
+/vendor/
+/themes/startup-theme/
+/_resources/
+/public/_resources/
+
+/dev/
+/.ddev/
+/public/
+/app/client/dist/
+/app/client/admin/
+/themes/villadina/
+
+/node_modules/

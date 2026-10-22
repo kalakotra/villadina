@@ -1,0 +1,78 @@
+{
+    "name": "silverstripe/installer",
+    "type": "silverstripe-recipe",
+    "description": "The SilverStripe Framework Installer",
+    "license": "BSD-3-Clause",
+    "require": {
+        "php": "^8.3",
+        "silverstripe/recipe-plugin": "^2.1",
+        "silverstripe/vendor-plugin": "^3.0",
+        "silverstripe/recipe-cms": "^6.3",
+        "silverstripe/startup-theme": "^1.0.12",
+        "silverstripe/login-forms": "^6.2",
+        "silverstripe/htmleditor-tinymce": "^1.1",
+        "ext-intl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "silverstripe/linkfield": "^5.2",
+        "silverstripe/userforms": "^7.1",
+        "silverstripe/blog": "^5.1",
+        "dnadesign/silverstripe-elemental": "^6.2",
+        "tractorcow/silverstripe-fluent": "^8.2",
+        "symbiote/silverstripe-gridfieldextensions": "^5.2",
+        "unclecheese/display-logic": "^4.0",
+        "bummzack/sortablefile": "^3.0",
+        "wilr/silverstripe-googlesitemaps": "^4.1",
+        "stripe/stripe-php": "^22.0",
+        "mpdf/mpdf": "^8.3",
+        "guzzlehttp/guzzle": "^7.16"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.3"
+    },
+    "extra": {
+        "project-files": [
+            "app/_config/*",
+            ".env.example",
+            ".graphql-generated/*"
+        ],
+        "public-files": [
+            "assets/*",
+            "favicon.ico"
+        ],
+        "project-files-installed": [
+            ".htaccess",
+            "app/.htaccess",
+            "app/_config/mimevalidator.yml",
+            "app/_config/mysite.yml",
+            "app/src/Page.php",
+            "app/src/PageController.php"
+        ],
+        "public-files-installed": [
+            ".htaccess",
+            "index.php",
+            "web.config"
+        ],
+        "expose": [
+            "app/client/dist",
+            "app/client/admin",
+            "themes/villadina/images"
+        ]
+    },
+    "scripts": {
+        "build-assets": [
+            "npm ci",
+            "npm run build"
+        ]
+    },
+    "config": {
+        "process-timeout": 600,
+        "allow-plugins": {
+            "composer/installers": true,
+            "silverstripe/recipe-plugin": true,
+            "silverstripe/vendor-plugin": true
+        }
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev"
+}

@@ -1,0 +1,44 @@
+---
+Name: villadina-booking
+After:
+  - '#rootroutes'
+  - '#coreroutes'
+---
+SilverStripe\Control\Director:
+  rules:
+    'booking': App\Booking\BookingController
+
+SilverStripe\Core\Injector\Injector:
+  App\Booking\AvailabilityProviderInterface:
+    class: App\Booking\Service\DatabaseAvailabilityProvider
+  App\Booking\Service\StripeGateway:
+    constructor:
+      - '%$App\Booking\Service\ReservationService'
+
+SilverStripe\SiteConfig\SiteConfig:
+  extensions:
+    - App\Booking\Extension\BookingSiteConfigExtension
+
+SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest:
+  extensions:
+    - App\Booking\Admin\ReservationItemRequestExtension
+
+SilverStripe\Admin\LeftAndMain:
+  extra_requirements_javascript:
+    - 'app/client/admin/booking-admin.js'
+
+# Locales accepted by /booking/quote?locale= — keep in sync with Fluent
+App\Booking\BookingController:
+  allowed_locales:
+    - hr_HR
+    - de_DE
+    - en_GB
+
+---
+Name: villadina-booking-fluent
+Only:
+  moduleexists: 'tractorcow/silverstripe-fluent'
+---
+SilverStripe\SiteConfig\SiteConfig:
+  translate:
+    - CancellationPolicy

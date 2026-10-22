@@ -1,0 +1,105 @@
+// =========================================================================
+// Villa Dina — design tokens (modern Mediterranean minimal)
+// Limestone whites, Kvarner sea blue, olive-sage accent, warm sand.
+// =========================================================================
+
+// Raw palette
+$vd-limestone: #fbfaf7;
+$vd-sand: #f1ece3;
+$vd-stone: #ddd5c7;
+$vd-sea: #1d566a;
+$vd-sea-deep: #123a48;
+$vd-sea-mist: #c9dde3;
+$vd-olive: #7d8763;
+$vd-ink: #1c2226;
+$vd-muted: #686f73;
+
+// Typography
+$vd-font-serif: 'Instrument Serif', 'Times New Roman', serif;
+$vd-font-sans: 'Manrope Variable', 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+// ---- Bootstrap overrides ------------------------------------------------
+$primary: $vd-sea;
+$secondary: $vd-olive;
+$light: $vd-sand;
+$dark: $vd-ink;
+$body-bg: $vd-limestone;
+$body-color: $vd-ink;
+$body-secondary-color: $vd-muted;
+$border-color: $vd-stone;
+$link-color: $vd-sea;
+$link-hover-color: $vd-sea-deep;
+$link-decoration: none;
+
+$font-family-sans-serif: $vd-font-sans;
+$font-family-base: $vd-font-sans;
+$headings-font-family: $vd-font-serif;
+$headings-font-weight: 400;
+$headings-line-height: 1.08;
+$headings-margin-bottom: 0.5em;
+$font-size-base: 1.0625rem; // 17px
+$line-height-base: 1.65;
+$font-weight-normal: 400;
+$font-weight-bold: 600;
+
+$h1-font-size: 4rem;
+$h2-font-size: 3rem;
+$h3-font-size: 2rem;
+$h4-font-size: 1.5rem;
+$h5-font-size: 1.25rem;
+$h6-font-size: 1rem;
+$enable-rfs: true;
+$rfs-base-value: 1.125rem;
+
+$border-radius: 0.25rem;
+$border-radius-sm: 0.125rem;
+$border-radius-lg: 0.5rem;
+$border-radius-pill: 50rem;
+$enable-shadows: false;
+$enable-gradients: false;
+
+$spacer: 1rem;
+$grid-gutter-width: 2rem;
+$container-max-widths: (
+    sm: 540px,
+    md: 720px,
+    lg: 960px,
+    xl: 1180px,
+    xxl: 1360px,
+);
+
+$btn-padding-y: 0.85rem;
+$btn-padding-x: 1.75rem;
+$btn-font-size: 0.8125rem;
+$btn-font-weight: 600;
+$btn-border-radius: $border-radius-pill;
+$btn-border-radius-lg: $border-radius-pill;
+$btn-border-radius-sm: $border-radius-pill;
+$btn-transition: color 0.2s, background-color 0.2s, border-color 0.2s, transform 0.2s;
+
+$input-padding-y: 0.85rem;
+$input-padding-x: 1rem;
+$input-bg: #fff;
+$input-border-color: $vd-stone;
+$input-focus-border-color: $vd-sea;
+$input-focus-box-shadow: 0 0 0 3px rgba($vd-sea, 0.12);
+$input-border-radius: $border-radius;
+$form-label-font-size: 0.75rem;
+$form-label-font-weight: 600;
+
+$offcanvas-horizontal-width: min(420px, 100vw);
+$offcanvas-bg-color: $vd-limestone;
+
+$pagination-border-radius: $border-radius-pill;
+$pagination-color: $vd-ink;
+$pagination-active-bg: $vd-sea;
+$pagination-active-border-color: $vd-sea;
+
+$breadcrumb-divider: quote('/');
+$breadcrumb-font-size: 0.8125rem;
+
+// ---- Theme-only ---------------------------------------------------------
+$vd-header-h: 84px;
+$vd-header-h-sm: 68px;
+$vd-section-y: clamp(4.5rem, 9vw, 8.5rem);
+$vd-ease: cubic-bezier(0.22, 0.61, 0.36, 1);

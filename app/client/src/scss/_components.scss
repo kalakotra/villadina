@@ -1,0 +1,364 @@
+// =========================================================================
+// Buttons
+// =========================================================================
+.btn {
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+
+    &:active {
+        transform: translateY(1px);
+    }
+}
+
+.btn-primary {
+    --bs-btn-hover-bg: #{$vd-sea-deep};
+    --bs-btn-hover-border-color: #{$vd-sea-deep};
+    --bs-btn-active-bg: #{$vd-sea-deep};
+}
+
+.btn-light {
+    --bs-btn-bg: #fff;
+    --bs-btn-border-color: #fff;
+    --bs-btn-color: #{$vd-ink};
+    --bs-btn-hover-bg: #{$vd-sand};
+    --bs-btn-hover-border-color: #{$vd-sand};
+}
+
+.btn-outline-light {
+    --bs-btn-hover-color: #{$vd-ink};
+}
+
+.btn-outline-dark {
+    --bs-btn-border-color: #{$vd-stone};
+    --bs-btn-hover-bg: #{$vd-ink};
+}
+
+.vd-link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $vd-ink;
+
+    svg {
+        width: 18px;
+        height: 18px;
+        transition: transform 0.3s $vd-ease;
+    }
+
+    &:hover {
+        color: $vd-sea;
+
+        svg {
+            transform: translateX(4px);
+        }
+    }
+}
+
+// Header "Book" button keeps contrast on transparent header
+.vd-header .btn-book {
+    padding: 0.65rem 1.25rem;
+
+    .has-hero .vd-header:not(.is-scrolled) & {
+        --bs-btn-bg: #fff;
+        --bs-btn-border-color: #fff;
+        --bs-btn-color: #{$vd-ink};
+        --bs-btn-hover-bg: #{$vd-sand};
+        --bs-btn-hover-border-color: #{$vd-sand};
+        --bs-btn-hover-color: #{$vd-ink};
+    }
+}
+
+// =========================================================================
+// Booking widget
+// =========================================================================
+.vd-booking {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 1rem;
+    color: $vd-ink;
+    background: #fff;
+    border-radius: $border-radius-lg;
+    box-shadow: 0 24px 60px -24px rgba($vd-ink, 0.35);
+
+    @include media-breakpoint-up(md) {
+        grid-template-columns: 2fr 1fr auto;
+        align-items: end;
+        padding: 1rem 1rem 1rem 1.5rem;
+    }
+
+    &__field {
+        label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: $vd-muted;
+        }
+
+        .form-control,
+        .form-select {
+            padding: 0.4rem 0;
+            border: 0;
+            border-bottom: 1px solid $vd-stone;
+            border-radius: 0;
+            background-color: transparent;
+            font-size: 1rem;
+
+            &:focus {
+                box-shadow: none;
+                border-color: $vd-sea;
+            }
+        }
+    }
+
+    &__meta {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0.5rem;
+        font-size: 0.8125rem;
+        color: $vd-muted;
+    }
+
+    &__error {
+        color: #a33a2a;
+    }
+
+    &--inline {
+        box-shadow: none;
+        border: 1px solid $vd-stone;
+    }
+}
+
+// flatpickr theming
+.flatpickr-calendar {
+    font-family: $vd-font-sans;
+    border-radius: $border-radius-lg;
+    box-shadow: 0 24px 60px -24px rgba($vd-ink, 0.35);
+
+    .flatpickr-day {
+        &.selected,
+        &.startRange,
+        &.endRange {
+            background: $vd-sea;
+            border-color: $vd-sea;
+        }
+
+        &.inRange {
+            background: $vd-sea-mist;
+            border-color: $vd-sea-mist;
+            box-shadow: -5px 0 0 $vd-sea-mist, 5px 0 0 $vd-sea-mist;
+        }
+
+        &.flatpickr-disabled {
+            color: rgba($vd-ink, 0.25);
+            text-decoration: line-through;
+        }
+    }
+}
+
+// Sticky mobile booking bar
+.vd-bookbar {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 1020;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+    background: #fff;
+    border-top: 1px solid $vd-stone;
+    box-shadow: 0 -10px 30px -20px rgba($vd-ink, 0.4);
+
+    &__text {
+        font-size: 0.8125rem;
+        line-height: 1.3;
+        color: $vd-muted;
+
+        strong {
+            display: block;
+            font-family: $vd-font-serif;
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: $vd-ink;
+        }
+    }
+
+    @include media-breakpoint-up(lg) {
+        display: none;
+    }
+}
+
+// =========================================================================
+// Slider controls
+// =========================================================================
+.vd-slider {
+    position: relative;
+
+    &__controls {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    &__prev,
+    &__next {
+        display: inline-grid;
+        place-items: center;
+        width: 52px;
+        height: 52px;
+        padding: 0;
+        color: $vd-ink;
+        background: transparent;
+        border: 1px solid $vd-stone;
+        border-radius: 50%;
+        transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+
+        &:hover {
+            color: #fff;
+            background: $vd-ink;
+            border-color: $vd-ink;
+        }
+
+        &.swiper-button-disabled {
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    .swiper-pagination-fraction {
+        position: static;
+        width: auto;
+        font-size: 0.8125rem;
+        letter-spacing: 0.1em;
+        color: $vd-muted;
+    }
+}
+
+.swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    background: currentColor;
+    opacity: 0.35;
+
+    &-active {
+        opacity: 1;
+    }
+}
+
+// =========================================================================
+// Map (consent-gated)
+// =========================================================================
+.vd-map {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: $vd-sand;
+    border-radius: $border-radius-lg;
+
+    iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        filter: grayscale(0.4) contrast(1.05);
+    }
+
+    &__consent {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        padding: 2rem;
+        text-align: center;
+        background: linear-gradient(135deg, $vd-sand 0%, $vd-sea-mist 100%);
+
+        p {
+            max-width: 22rem;
+            margin: 0.75rem auto 1.25rem;
+            font-size: 0.875rem;
+            color: $vd-muted;
+        }
+    }
+
+    &__pin {
+        width: 40px;
+        height: 40px;
+        color: $vd-sea;
+    }
+}
+
+// =========================================================================
+// Cards
+// =========================================================================
+.vd-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: inherit;
+
+    &__media {
+        aspect-ratio: 4 / 3;
+        margin-bottom: 1.25rem;
+        border-radius: $border-radius-lg;
+
+        img {
+            transition: transform 1.2s $vd-ease;
+        }
+    }
+
+    &:hover &__media img {
+        transform: scale(1.04);
+    }
+
+    &__meta {
+        margin-bottom: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: $vd-olive;
+    }
+
+    &__title {
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    &__text {
+        color: $vd-muted;
+    }
+
+    &:hover {
+        color: inherit;
+    }
+}
+
+// Pagination & breadcrumb tweaks
+.pagination {
+    --bs-pagination-border-color: transparent;
+    --bs-pagination-hover-bg: #{$vd-sand};
+    --bs-pagination-hover-border-color: transparent;
+    gap: 0.25rem;
+
+    .page-link {
+        min-width: 44px;
+        text-align: center;
+        border-radius: $border-radius-pill !important;
+    }
+}

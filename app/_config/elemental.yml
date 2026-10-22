@@ -1,0 +1,35 @@
+---
+Name: villadina-elemental
+After:
+  - '#elementalpages'
+---
+# Background / spacing variants for every block (ElementHolder.ss reads $StyleVariant)
+DNADesign\Elemental\Models\BaseElement:
+  styles:
+    vd-el--white: 'Background: white'
+    vd-el--sand: 'Background: sand'
+    vd-el--sea: 'Background: sea (dark)'
+    'vd-el--sand vd-el--tight': 'Background: sand, less spacing'
+    vd-el--tight: 'Less spacing'
+
+# Blocks available on every Elemental page.
+# Adjust the class name if your ModularPage lives in a namespace (e.g. App\Pages\ModularPage).
+App\Pages\ModularPage:
+  allowed_elements:
+    - App\Elements\HeroElement
+    - App\Elements\KeyFactsElement
+    - App\Elements\TextImageElement
+    - App\Elements\AmenitiesElement
+    - App\Elements\GalleryElement
+    - App\Elements\LocationElement
+    - App\Elements\ReviewsElement
+    - App\Elements\BookingElement
+    - App\Elements\FAQElement
+    - App\Elements\CTAElement
+    - DNADesign\Elemental\Models\ElementContent
+  stop_element_inheritance: true
+
+# Don't show the generic content element's title by default
+DNADesign\Elemental\Models\ElementContent:
+  defaults:
+    ShowTitle: false

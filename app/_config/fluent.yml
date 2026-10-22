@@ -1,0 +1,98 @@
+---
+Name: villadina-fluent
+Only:
+  moduleexists: 'tractorcow/silverstripe-fluent'
+---
+# Element items + SiteConfig translatable (elements themselves are handled by
+# Fluent's own BaseElement integration once elemental is installed).
+App\Elements\Items\KeyFact:
+  extensions:
+    - TractorCow\Fluent\Extension\FluentExtension
+  translate:
+    - Value
+    - Label
+
+App\Elements\Items\Amenity:
+  extensions:
+    - TractorCow\Fluent\Extension\FluentExtension
+  translate:
+    - Title
+    - Description
+
+App\Elements\Items\Distance:
+  extensions:
+    - TractorCow\Fluent\Extension\FluentExtension
+  translate:
+    - Title
+    - Value
+
+App\Elements\Items\Review:
+  extensions:
+    - TractorCow\Fluent\Extension\FluentExtension
+  translate:
+    - Origin
+    - Quote
+
+App\Elements\Items\FAQItem:
+  extensions:
+    - TractorCow\Fluent\Extension\FluentExtension
+  translate:
+    - Question
+    - Answer
+
+SilverStripe\SiteConfig\SiteConfig:
+  extensions:
+    - TractorCow\Fluent\Extension\FluentExtension
+  translate:
+    - Title
+    - Tagline
+    - VillaSubtitle
+    - Address
+    - PriceFrom
+
+# Elemental blocks, links and booking seasons are translated per locale
+DNADesign\Elemental\Models\BaseElement:
+  extensions:
+    - TractorCow\Fluent\Extension\FluentVersionedExtension
+
+SilverStripe\LinkField\Models\Link:
+  extensions:
+    - TractorCow\Fluent\Extension\FluentVersionedExtension
+  translate:
+    - LinkText
+
+App\Booking\Model\Season:
+  extensions:
+    - TractorCow\Fluent\Extension\FluentExtension
+  translate:
+    - Title
+
+---
+Name: villadina-fluent-userforms
+Only:
+  moduleexists:
+    - 'tractorcow/silverstripe-fluent'
+    - 'silverstripe/userforms'
+---
+SilverStripe\UserForms\Model\EditableFormField:
+  extensions:
+    - TractorCow\Fluent\Extension\FluentVersionedExtension
+  translate:
+    - Title
+    - Placeholder
+    - RightTitle
+    - CustomErrorMessage
+
+---
+Name: villadina-fluent-blog
+Only:
+  moduleexists:
+    - 'tractorcow/silverstripe-fluent'
+    - 'silverstripe/blog'
+---
+SilverStripe\Blog\Model\BlogCategory:
+  extensions:
+    - TractorCow\Fluent\Extension\FluentExtension
+  translate:
+    - Title
+    - URLSegment
