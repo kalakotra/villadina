@@ -11,6 +11,5 @@
 /.ddev/
 /public/
 /app/client/dist/
-/app/client/admin/
 
 /node_modules/
