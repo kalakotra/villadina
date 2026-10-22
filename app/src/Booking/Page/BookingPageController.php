@@ -153,12 +153,12 @@ class BookingPageController extends PageController
     {
         $req = $this->getRequest();
         $fields = $this->RequestForm()->Fields();
-        $pick = static fn (string $key, string $field) => $req->getVar($key) ?? $fields->dataFieldByName($field)?->Value();
+        $pick = static fn (string $key, string $field) => $req->getVar($key) ?? $fields->dataFieldByName($field)?->getValue();
 
         return [
             'arrival' => (string) ($this->parseDate($pick('arrival', 'Arrival'))?->format('Y-m-d') ?? ''),
             'departure' => (string) ($this->parseDate($pick('departure', 'Departure'))?->format('Y-m-d') ?? ''),
-            'adults' => max(1, (int) ($req->getVar('adults') ?? $req->getVar('guests') ?? $fields->dataFieldByName('Adults')?->Value() ?: 2)),
+            'adults' => max(1, (int) ($req->getVar('adults') ?? $req->getVar('guests') ?? $fields->dataFieldByName('Adults')?->getValue() ?: 2)),
             'children' => max(0, (int) $pick('children', 'Children')),
             'infants' => max(0, (int) $pick('infants', 'Infants')),
         ];
