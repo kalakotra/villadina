@@ -28,8 +28,8 @@
                 </ul>
                 <% if $SiteConfig.InstagramURL || $SiteConfig.FacebookURL || $SiteConfig.BookingComURL || $SiteConfig.AirbnbURL %>
                     <ul class="vd-footer__social mt-4">
-                        <% if $SiteConfig.InstagramURL %><li><a href="$SiteConfig.InstagramURL" target="_blank" rel="noopener" aria-label="Instagram">$Icon('instagram')</a></li><% end_if %>
-                        <% if $SiteConfig.FacebookURL %><li><a href="$SiteConfig.FacebookURL" target="_blank" rel="noopener" aria-label="Facebook">$Icon('facebook')</a></li><% end_if %>
+                        <% if $SiteConfig.InstagramURL %><li><a href="$SiteConfig.InstagramURL" target="_blank" rel="noopener" aria-label="Instagram">$SvgIcon('instagram')</a></li><% end_if %>
+                        <% if $SiteConfig.FacebookURL %><li><a href="$SiteConfig.FacebookURL" target="_blank" rel="noopener" aria-label="Facebook">$SvgIcon('facebook')</a></li><% end_if %>
                     </ul>
                 <% end_if %>
             </div>

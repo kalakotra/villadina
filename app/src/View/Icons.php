@@ -11,7 +11,7 @@ use SilverStripe\View\TemplateGlobalProvider;
 /**
  * Inline SVG line icons (24×24, stroke = currentColor).
  *
- * Template:  $Icon('wifi')   $Icon('arrow-right', 'my-class')
+ * Template:  $SvgIcon('wifi')   $SvgIcon('arrow-right', 'my-class')
  */
 final class Icons implements TemplateGlobalProvider
 {
@@ -88,7 +88,7 @@ final class Icons implements TemplateGlobalProvider
         ];
     }
 
-    public static function svg(string $name, string $class = ''): DBHTMLText
+    public static function svg(string $name = '', string $class = ''): DBHTMLText
     {
         $inner = self::PATHS[$name] ?? '';
         $html = $inner === ''
@@ -105,7 +105,8 @@ final class Icons implements TemplateGlobalProvider
     public static function get_template_global_variables(): array
     {
         return [
-            'Icon' => 'svg',
+            // Not "Icon": core CMS templates use $Icon for record/menu icons
+            'SvgIcon' => 'svg',
         ];
     }
 }

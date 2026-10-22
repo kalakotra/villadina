@@ -53,7 +53,7 @@
 
                     <% else_if $Status == 'paid' || $Status == 'completed' %>
                         <h1 class="mb-4"><%t VDBooking.PaidTitle 'Fully paid – thank you!' %></h1>
-                        <p><span class="vd-pay__status vd-pay__status--ok">$Icon('check') $StatusLabel</span></p>
+                        <p><span class="vd-pay__status vd-pay__status--ok">$SvgIcon('check') $StatusLabel</span></p>
 
                     <% else %>
                         <h1 class="mb-4"><%t VDBooking.InactiveTitle 'This booking is no longer active' %></h1>

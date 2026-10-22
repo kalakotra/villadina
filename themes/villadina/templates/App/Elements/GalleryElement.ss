@@ -11,8 +11,8 @@
             </div>
             <% if $DisplayMode == 'slider' %>
                 <div class="vd-slider__controls">
-                    <button class="vd-slider__prev" type="button" aria-label="<%t VillaDina.Previous 'Previous' %>">$Icon('arrow-left')</button>
-                    <button class="vd-slider__next" type="button" aria-label="<%t VillaDina.Next 'Next' %>">$Icon('arrow-right')</button>
+                    <button class="vd-slider__prev" type="button" aria-label="<%t VillaDina.Previous 'Previous' %>">$SvgIcon('arrow-left')</button>
+                    <button class="vd-slider__next" type="button" aria-label="<%t VillaDina.Next 'Next' %>">$SvgIcon('arrow-right')</button>
                 </div>
             <% end_if %>
         </div>

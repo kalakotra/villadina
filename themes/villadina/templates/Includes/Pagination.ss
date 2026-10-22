@@ -3,7 +3,7 @@
     <nav class="mt-5" aria-label="<%t VillaDina.Pagination 'Pagination' %>">
         <ul class="pagination justify-content-center">
             <% if $NotFirstPage %>
-                <li class="page-item"><a class="page-link" href="$PrevLink" aria-label="<%t VillaDina.Previous 'Previous' %>">$Icon('arrow-left')</a></li>
+                <li class="page-item"><a class="page-link" href="$PrevLink" aria-label="<%t VillaDina.Previous 'Previous' %>">$SvgIcon('arrow-left')</a></li>
             <% end_if %>
             <% loop $PaginationSummary(4) %>
                 <% if $CurrentBool %>
@@ -15,7 +15,7 @@
                 <% end_if %>
             <% end_loop %>
             <% if $NotLastPage %>
-                <li class="page-item"><a class="page-link" href="$NextLink" aria-label="<%t VillaDina.Next 'Next' %>">$Icon('arrow-right')</a></li>
+                <li class="page-item"><a class="page-link" href="$NextLink" aria-label="<%t VillaDina.Next 'Next' %>">$SvgIcon('arrow-right')</a></li>
             <% end_if %>
         </ul>
     </nav>

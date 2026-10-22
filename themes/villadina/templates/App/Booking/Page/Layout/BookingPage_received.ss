@@ -9,7 +9,7 @@
             <% if $Reference %>
                 <p class="mt-4"><span class="vd-pay__status"><%t VDBooking.Reference 'Reference' %>: $Reference</span></p>
             <% end_if %>
-            <a href="$BaseHref" class="vd-link-arrow mt-4">$Icon('arrow-left') <%t VillaDina.Home 'Home' %></a>
+            <a href="$BaseHref" class="vd-link-arrow mt-4">$SvgIcon('arrow-left') <%t VillaDina.Home 'Home' %></a>
         </div>
     </div>
 </section>

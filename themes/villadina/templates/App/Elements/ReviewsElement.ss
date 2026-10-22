@@ -14,8 +14,8 @@
             <% end_if %>
             <% if $SortedReviews.Count %>
                 <div class="vd-slider__controls d-none d-md-flex">
-                    <button class="vd-slider__prev" type="button" aria-label="<%t VillaDina.Previous 'Previous' %>">$Icon('arrow-left')</button>
-                    <button class="vd-slider__next" type="button" aria-label="<%t VillaDina.Next 'Next' %>">$Icon('arrow-right')</button>
+                    <button class="vd-slider__prev" type="button" aria-label="<%t VillaDina.Previous 'Previous' %>">$SvgIcon('arrow-left')</button>
+                    <button class="vd-slider__next" type="button" aria-label="<%t VillaDina.Next 'Next' %>">$SvgIcon('arrow-right')</button>
                 </div>
             <% end_if %>
         </div>
@@ -27,7 +27,7 @@
                 <div class="swiper-slide h-auto">
                     <figure class="vd-review">
                         <div class="vd-review__stars" aria-label="$Rating / 5">
-                            <% loop $Stars %>$Icon('star')<% end_loop %>
+                            <% loop $Stars %>$SvgIcon('star')<% end_loop %>
                         </div>
                         <blockquote class="vd-review__quote">“{$Quote}”</blockquote>
                         <figcaption class="vd-review__author">

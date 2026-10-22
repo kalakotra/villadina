@@ -10,7 +10,7 @@
                     <% loop $SortedDistances %>
                         <li>
                             <span class="d-inline-flex align-items-center gap-2">
-                                <% if $IconKey %>$Icon($IconKey)<% end_if %>
+                                <% if $IconKey %>$SvgIcon($IconKey)<% end_if %>
                                 $Title
                             </span>
                             <span class="vd-distances__value">$Value</span>
@@ -21,7 +21,7 @@
 
             <% if $DirectionsURL %>
                 <a href="$DirectionsURL" class="vd-link-arrow mt-4" target="_blank" rel="noopener">
-                    <%t VillaDina.Directions 'Get directions' %> $Icon('arrow-right')
+                    <%t VillaDina.Directions 'Get directions' %> $SvgIcon('arrow-right')
                 </a>
             <% end_if %>
         </div>
@@ -31,7 +31,7 @@
                 <div class="vd-map" data-map-src="$MapEmbedURL.ATT" data-map-title="$TitlePlain.ATT">
                     <div class="vd-map__consent">
                         <div>
-                            <span class="vd-map__pin">$Icon('pin')</span>
+                            <span class="vd-map__pin">$SvgIcon('pin')</span>
                             <p>
                                 <% if $MapProvider == 'google' %>
                                     <%t VillaDina.MapConsentGoogle 'Loading the map connects to Google Maps and transfers data to Google.' %>

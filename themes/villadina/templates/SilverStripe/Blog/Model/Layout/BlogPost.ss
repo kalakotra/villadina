@@ -1,7 +1,7 @@
 <article class="vd-post">
     <header class="vd-post__header">
         <div class="container">
-            <a href="$Parent.Link" class="vd-link-arrow mb-4">$Icon('arrow-left') $Parent.Title</a>
+            <a href="$Parent.Link" class="vd-link-arrow mb-4">$SvgIcon('arrow-left') $Parent.Title</a>
             <h1>$Title</h1>
             <div class="vd-post__meta">
                 <time datetime="$PublishDate.Rfc3339">$PublishDate.Format('d. MMMM y')</time>
@@ -33,7 +33,7 @@
                     <% loop $Tags %><a href="$Link">#$Title</a><% end_loop %>
                 </div>
             <% end_if %>
-            <a href="$Parent.Link" class="vd-link-arrow">$Icon('arrow-left') <%t VillaDina.BackToBlog 'Back to all posts' %></a>
+            <a href="$Parent.Link" class="vd-link-arrow">$SvgIcon('arrow-left') <%t VillaDina.BackToBlog 'Back to all posts' %></a>
         </footer>
     </div>
 </article>
@@ -44,7 +44,7 @@
             <% if $getBlogPosts.Exclude('ID', $Top.ID).Limit(3) %>
                 <div class="vd-el__head vd-el__head--split">
                     <h2 class="m-0"><%t VillaDina.MorePosts 'More stories' %></h2>
-                    <a href="$Link" class="vd-link-arrow"><%t VillaDina.ShowAll 'Show all' %> $Icon('arrow-right')</a>
+                    <a href="$Link" class="vd-link-arrow"><%t VillaDina.ShowAll 'Show all' %> $SvgIcon('arrow-right')</a>
                 </div>
                 <div class="row gy-5">
                     <% loop $getBlogPosts.Exclude('ID', $Top.ID).Limit(3) %>

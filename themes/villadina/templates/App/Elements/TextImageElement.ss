@@ -6,7 +6,7 @@
             <div class="vd-prose mt-4">$Content</div>
             <% with $CTALink %>
                 <% if $exists %>
-                    <a href="$URL" class="vd-link-arrow mt-4"<% if $OpenInNew %> target="_blank" rel="noopener"<% end_if %>>$Title $Icon('arrow-right')</a>
+                    <a href="$URL" class="vd-link-arrow mt-4"<% if $OpenInNew %> target="_blank" rel="noopener"<% end_if %>>$Title $SvgIcon('arrow-right')</a>
                 <% end_if %>
             <% end_with %>
         </div>
