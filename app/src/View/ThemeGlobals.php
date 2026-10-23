@@ -14,6 +14,7 @@ use SilverStripe\View\TemplateGlobalProvider;
  *
  *   $LocaleCode         "de" | "hr" | "en"
  *   $BookingEndpoint    "/booking/availability"
+ *   $QuoteEndpoint      "/booking/quote"   (relative – no host/protocol mismatch behind proxies)
  */
 final class ThemeGlobals implements TemplateGlobalProvider
 {
@@ -27,11 +28,17 @@ final class ThemeGlobals implements TemplateGlobalProvider
         return Director::baseURL() . 'booking/availability';
     }
 
+    public static function quoteEndpoint(): string
+    {
+        return Director::baseURL() . 'booking/quote';
+    }
+
     public static function get_template_global_variables(): array
     {
         return [
             'LocaleCode' => 'localeCode',
             'BookingEndpoint' => 'bookingEndpoint',
+            'QuoteEndpoint' => 'quoteEndpoint',
         ];
     }
 }

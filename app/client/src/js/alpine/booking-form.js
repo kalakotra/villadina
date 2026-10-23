@@ -91,10 +91,20 @@ export default () => ({
         Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, String(v)));
 
         try {
-            const res = await fetch(url, { headers: { Accept: 'application/json' }, signal: this.controller.signal });
+            const res = await fetch(url, {
+                headers: { Accept: 'application/json' },
+                credentials: 'same-origin',
+                signal: this.controller.signal,
+            });
+            const type = res.headers.get('content-type') || '';
+            if (!res.ok || !type.includes('application/json')) {
+                throw new Error(`Quote request failed: HTTP ${res.status} (${type || 'no content-type'}) ${url}`);
+            }
             this.quote = await res.json();
         } catch (e) {
-            if (e.name !== 'AbortError') this.quote = { valid: false, errors: [this.$el.dataset.errorText || 'Error'] };
+            if (e.name === 'AbortError') return;
+            console.error('[bookingForm]', e);
+            this.quote = { valid: false, errors: [this.$el.dataset.errorText || 'Error'] };
         } finally {
             this.loading = false;
         }

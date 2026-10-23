@@ -5,7 +5,7 @@
          x-data="bookingForm"
          data-state="$InitialStateJSON"
          data-availability="$BookingEndpoint"
-         data-quote="{$BaseHref}booking/quote"
+         data-quote="$QuoteEndpoint"
          data-locale="$LocaleCode"
          data-error-text="<%t VDBooking.ErrGeneric 'Something went wrong. Please try again or contact us directly.' %>">
 

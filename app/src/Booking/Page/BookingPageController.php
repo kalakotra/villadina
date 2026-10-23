@@ -166,7 +166,8 @@ class BookingPageController extends PageController
 
     public function InitialStateJSON(): string
     {
-        return htmlspecialchars((string) json_encode($this->initialState()), ENT_QUOTES);
+        // Plain JSON – the template casts it as Text, which escapes it for the attribute
+        return (string) json_encode($this->initialState());
     }
 
     public function received(HTTPRequest $request): array
