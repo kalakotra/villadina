@@ -1,0 +1,225 @@
+// =========================================================================
+// Places (beaches / destinations) + article fact box
+// =========================================================================
+.vd-places {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: vd-place;
+
+    @include media-breakpoint-up(md) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include media-breakpoint-up(xl) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.vd-place {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid $vd-stone;
+    border-radius: $border-radius-lg;
+    counter-increment: vd-place;
+
+    .vd-el--sand & {
+        border-color: transparent;
+    }
+
+    &__media {
+        aspect-ratio: 4 / 3;
+    }
+
+    &__body {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        padding: 1.5rem 1.5rem 1.25rem;
+    }
+
+    &__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem 0.9rem;
+        margin-bottom: 0.6rem;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: $vd-olive;
+
+        // number badge for places without photo
+        &::before {
+            content: counter(vd-place, decimal-leading-zero);
+            color: $vd-muted;
+
+            .vd-place--media & {
+                display: none;
+            }
+        }
+    }
+
+    &__flag {
+        padding: 0 0.5rem;
+        color: #fff;
+        background: $vd-sea;
+        border-radius: $border-radius-pill;
+    }
+
+    &__title {
+        margin-bottom: 0.5rem;
+        font-size: 1.6rem;
+
+        a {
+            color: inherit;
+
+            &:hover {
+                color: $vd-sea;
+            }
+        }
+    }
+
+    &__text {
+        margin-bottom: 1rem;
+        font-size: 0.9375rem;
+        color: $vd-muted;
+    }
+
+    &__tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        margin: 0 0 1.25rem;
+        padding: 0;
+        list-style: none;
+
+        li {
+            padding: 0.2rem 0.65rem;
+            font-size: 0.75rem;
+            color: $vd-ink;
+            background: $vd-sand;
+            border-radius: $border-radius-pill;
+
+            .vd-el--sand & {
+                background: $vd-limestone;
+            }
+        }
+    }
+
+    &__foot {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem 1rem;
+        margin-top: auto;
+        padding-top: 1rem;
+        border-top: 1px solid $vd-stone;
+    }
+
+    &__distance {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        white-space: nowrap;
+
+        svg {
+            flex: 0 0 auto;
+            width: 20px;
+            height: 20px;
+            color: $vd-sea;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        small {
+            color: $vd-muted;
+        }
+    }
+
+    &__links {
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem 1rem;
+
+        .vd-link-arrow {
+            font-size: 0.75rem;
+        }
+    }
+
+    &__route {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: $vd-muted;
+
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        &:hover {
+            color: $vd-sea;
+        }
+    }
+}
+
+.vd-place-facts {
+    max-width: 42rem;
+    margin: 0 auto 2.5rem;
+    padding: 1.5rem 1.75rem;
+    font-size: 0.9375rem;
+    background: $vd-sand;
+    border-radius: $border-radius-lg;
+
+    &__title {
+        margin-bottom: 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: $vd-olive;
+    }
+
+    dl {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+        gap: 1rem 1.5rem;
+        margin: 0 0 1.25rem;
+    }
+
+    dt {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: $vd-muted;
+    }
+
+    dd {
+        margin: 0.15rem 0 0;
+        font-family: $vd-font-serif;
+        font-size: 1.35rem;
+        line-height: 1.25;
+
+        a {
+            font-family: $vd-font-sans;
+            font-size: 0.875rem;
+            color: $vd-ink;
+            overflow-wrap: anywhere;
+        }
+    }
+}

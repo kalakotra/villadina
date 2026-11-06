@@ -1,5 +1,15 @@
 de:
   VillaDina:
+    BlueFlag: "Blaue Flagge"
+    ByCarFromVilla: "mit dem Auto ab Villa Dina"
+    FromVilla: "ab Villa"
+    ReadGuide: "Zum Reiseführer"
+    Route: "Route"
+    QuickFacts: "Auf einen Blick"
+    DistanceFromVilla: "Entfernung ab Villa Dina"
+    DriveTime: "Fahrzeit"
+    Type: "Art"
+    RouteFromVilla: "Route ab der Villa"
     Address: "Adresse"
     All: "Alle"
     ArrivalDeparture: "Anreise – Abreise"
@@ -172,3 +182,8 @@ de:
     ThankYou: "Vielen Dank!"
     Total: "Gesamt"
     YourStay: "Ihr Aufenthalt"
+  App\Elements\Items\Place:
+    KindBeach: "Strand"
+    KindTown: "Stadt"
+    KindNature: "Natur"
+    KindSight: "Sehenswürdigkeit"

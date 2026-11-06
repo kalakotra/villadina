@@ -26,6 +26,15 @@ App\Elements\Items\Distance:
     - Title
     - Value
 
+App\Elements\Items\Place:
+  extensions:
+    - TractorCow\Fluent\Extension\FluentExtension
+  translate:
+    - Title
+    - Summary
+    - Surface
+    - Features
+
 App\Elements\Items\Review:
   extensions:
     - TractorCow\Fluent\Extension\FluentExtension

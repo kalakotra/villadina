@@ -33,7 +33,8 @@ vendor/bin/sake db:build --flush
 | Text + image | priča uz 1–2 slike, lijevo/desno |
 | Amenities | ikonice sadržaja (21 ugrađena SVG ikona ili custom) |
 | Gallery | mozaik (9 + lightbox) ili slider |
-| Location | udaljenosti + mapa (OSM/Google, učitava se tek na klik – GDPR) |
+| Location | udaljenosti + mapa (OSM/Google, učitava se tek na klik – GDPR); redovi s koordinatama dobivaju km/min vožnje automatski |
+| Places | plaže / izleti: opis, vrsta, podloga, Plava zastava, km + min vožnje od vile, ruta, link na vodič + ItemList JSON-LD |
 | Reviews | slider recenzija + ukupna ocjena |
 | Booking | widget dostupnosti → booking stranica, + Booking.com/Airbnb |
 | FAQ | accordion + FAQPage JSON-LD |
@@ -97,18 +98,29 @@ Ručne rezervacije (telefon): u CMS-u nova rezervacija → cijena se računa iz 
 vendor/bin/sake db:build --flush
 vendor/bin/sake tasks:villa-seed                    # svjež DB
 vendor/bin/sake tasks:villa-seed --remove-defaults  # + arhivira installer "About Us"/"Contact Us"
-vendor/bin/sake tasks:villa-seed --force            # ponovo; dodaje samo ono što nedostaje
+vendor/bin/sake tasks:villa-seed --force            # ponovo; dodaje samo ono što nedostaje (stranice, članke, sezone)
+vendor/bin/sake tasks:villa-seed --rebuild=all      # postojećim seed stranicama ZAMIJENI blokove + SEO polja
+vendor/bin/sake tasks:villa-seed --rebuild=home,location,istria,beaches,blog
+vendor/bin/sake tasks:villa-distances --all         # ponovo izračunaj km/min vožnje (OSRM)
 ```
 
 Kreira:
 - Fluent lokale `hr_HR` (default), `de_DE`, `en_GB` ako ne postoje;
-- stranice: Početna (installer `home` se pretvara u `ModularPage`), Vila, Galerija, Lokacija, Rezervacija (Booking page), Istra savjeti (blog s 2 članka), Kontakt (UserForms + primatelj), Uvjeti najma, Impressum, Zaštita podataka;
-- sve blokove s HR/DE/EN tekstovima, slike iz `app/seed/images` (folder *Villa* u Files);
-- postavke (Settings → Villa / Booking), sezone za tekuću i sljedeću godinu, Booking.com/Airbnb feedove (bez import URL-a).
+- stranice: Početna, Vila, Galerija, Lokacija, **Istra – vodič za izlete** (+ podstranica **Plaže u blizini**), Rezervacija, Istra savjeti (blog s 8 vodiča: Labin i Rabac, Pula, Brijuni, Rovinj, Poreč, Motovun/Grožnjan/Hum, Učka, Kamenjak), Kontakt, Uvjeti najma, Impressum, Zaštita podataka;
+- za svaku stranicu i članak **Meta title + Meta description** u HR/DE/EN (`--rebuild` ih prepisuje);
+- 13 odredišta i 13 plaža (Places blokovi) s koordinatama; na kraju se računa vožnja od vile (OSRM, javni demo server; bez mreže → zračna linija, ponovi `tasks:villa-distances --all`);
+- postavke (Settings → Villa: koordinate vile 45.158524, 14.076953), sezone, Booking.com/Airbnb feedove.
+
+`--rebuild` briše blokove navedenih stranica i gradi ih ponovno; ručno dodani blokovi na tim stranicama se gube. Stari primjer-članci bloga arhiviraju se s `--rebuild=blog`.
+
+### SEO / AIO / GEO
+- `<title>` = Meta title (ili naslov) + naziv stranice; canonical, `og:*`, `og:locale`, hreflang (Fluent);
+- JSON-LD: `LodgingBusiness`/`VacationRental` + `WebSite` na početnoj, `BreadcrumbList` na ostalima, `BlogPosting` s `about` (mjesto + koordinate) na člancima, `ItemList` (Beach/City/Park/TouristAttraction + geo) u Places blokovima, `FAQPage` u FAQ blokovima;
+- tekstovi pisani „answer-first" (prvi odlomak odgovara na pitanje), s kratkim FAQ-om; na člancima kutija „Ukratko" s km/min od vile, GPS-om i rutom.
 
 `ModularPage` klasa: `App\Task\SeedContentTask.page_class` (yml) ako je u namespaceu.
 
-**Sve je primjer:** cijene, broj soba/gostiju, udaljenosti i koordinate (približne – provjeriti), recenzije (`[Gast 1]` placeholderi), pravni tekstovi (`[…]`) i slike (ilustracije označene „Placeholder“) zamijeniti stvarnim sadržajem prije objave.
+**Placeholderi:** cijene, broj soba/gostiju, recenzije (`[Gast 1]`), pravni tekstovi (`[…]`), trgovina (`[~5 km]`) i slike zamijeniti stvarnim sadržajem. Koordinate označene `// approx.` u `SeedData::beaches()` (Lanterna, Sv. Andrija, Prtlog, Medveja, Lone, Ambrela) provjeriti u CMS-u; Plava zastava dodjeljuje se godišnje.
 
 ## Preview
 `preview/` sadrži statičke HTML stranice istog markupa kao templati (za brzi pregled bez SS-a) i `screenshots/`.

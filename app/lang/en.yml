@@ -1,5 +1,15 @@
 en:
   VillaDina:
+    BlueFlag: "Blue Flag"
+    ByCarFromVilla: "by car from Villa Dina"
+    FromVilla: "from the villa"
+    ReadGuide: "Read the guide"
+    Route: "Route"
+    QuickFacts: "Quick facts"
+    DistanceFromVilla: "Distance from Villa Dina"
+    DriveTime: "Driving time"
+    Type: "Type"
+    RouteFromVilla: "Route from the villa"
     Address: "Address"
     All: "All"
     ArrivalDeparture: "Arrival – Departure"
@@ -172,3 +182,8 @@ en:
     ThankYou: "Thank you!"
     Total: "Total"
     YourStay: "Your stay"
+  App\Elements\Items\Place:
+    KindBeach: "Beach"
+    KindTown: "Town"
+    KindNature: "Nature"
+    KindSight: "Sight"

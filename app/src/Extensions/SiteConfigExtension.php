@@ -28,6 +28,8 @@ use SilverStripe\SiteConfig\SiteConfig;
  * @property string|null $Address
  * @property string|null $PriceFrom
  * @property int $MaxGuests
+ * @property float $Latitude
+ * @property float $Longitude
  * @property string|null $BookingComURL
  * @property string|null $AirbnbURL
  * @property string|null $InstagramURL
@@ -48,6 +50,8 @@ class SiteConfigExtension extends Extension
         'Address' => 'Text',
         'PriceFrom' => 'Varchar(80)',
         'MaxGuests' => 'Int',
+        'Latitude' => 'Decimal(9,6)',
+        'Longitude' => 'Decimal(9,6)',
         'BookingComURL' => 'Varchar(500)',
         'AirbnbURL' => 'Varchar(500)',
         'InstagramURL' => 'Varchar(500)',
@@ -86,6 +90,9 @@ class SiteConfigExtension extends Extension
             TextField::create('Phone', 'Phone')->setDescription('International format, e.g. +385 91 123 4567'),
             TextField::create('WhatsApp', 'WhatsApp number')->setDescription('Digits only with country code, e.g. 385911234567'),
             TextareaField::create('Address', 'Address')->setRows(3),
+            NumericField::create('Latitude', 'Villa latitude')->setScale(6)
+                ->setDescription('Exact position of the house, e.g. 45.158524 – origin for all driving distances and the map data for search engines.'),
+            NumericField::create('Longitude', 'Villa longitude')->setScale(6),
 
             HeaderField::create('VillaBookingHeader', 'Booking', 3),
             TextField::create('PriceFrom', 'Price label')->setDescription('e.g. "ab 180 € / Nacht" (translated per locale)'),

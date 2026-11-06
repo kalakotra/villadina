@@ -25,7 +25,10 @@
             </div>
         <% end_if %>
 
-        <div class="vd-prose vd-post__body">$Content</div>
+        <div class="vd-post__body">
+            <% if $RelatedPlace %><% with $RelatedPlace %><% include PlaceFacts %><% end_with %><% end_if %>
+            <div class="vd-prose">$Content</div>
+        </div>
 
         <footer class="vd-post__footer">
             <% if $Tags.Count %>

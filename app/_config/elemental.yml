@@ -22,6 +22,7 @@ App\Pages\ModularPage:
     - App\Elements\AmenitiesElement
     - App\Elements\GalleryElement
     - App\Elements\LocationElement
+    - App\Elements\PlacesElement
     - App\Elements\ReviewsElement
     - App\Elements\BookingElement
     - App\Elements\FAQElement

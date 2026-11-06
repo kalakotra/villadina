@@ -13,7 +13,7 @@
                                 <% if $IconKey %>$SvgIcon($IconKey)<% end_if %>
                                 $Title
                             </span>
-                            <span class="vd-distances__value">$Value</span>
+                            <span class="vd-distances__value">$DisplayValue</span>
                         </li>
                     <% end_loop %>
                 </ul>

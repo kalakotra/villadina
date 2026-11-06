@@ -1,5 +1,15 @@
 hr:
   VillaDina:
+    BlueFlag: "Plava zastava"
+    ByCarFromVilla: "automobilom od Ville Dina"
+    FromVilla: "od vile"
+    ReadGuide: "Pročitajte vodič"
+    Route: "Ruta"
+    QuickFacts: "Ukratko"
+    DistanceFromVilla: "Udaljenost od Ville Dina"
+    DriveTime: "Vrijeme vožnje"
+    Type: "Vrsta"
+    RouteFromVilla: "Ruta od vile"
     Address: "Adresa"
     All: "Sve"
     ArrivalDeparture: "Dolazak – Odlazak"
@@ -172,3 +182,8 @@ hr:
     ThankYou: "Hvala!"
     Total: "Ukupno"
     YourStay: "Vaš boravak"
+  App\Elements\Items\Place:
+    KindBeach: "Plaža"
+    KindTown: "Grad"
+    KindNature: "Priroda"
+    KindSight: "Znamenitost"

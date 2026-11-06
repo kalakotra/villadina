@@ -7,6 +7,7 @@ namespace App\Task;
 use App\Booking\Model\ICalFeed;
 use App\Booking\Model\Season;
 use App\Booking\Page\BookingPage;
+use App\Geo\RouteFromVillaExtension;
 use App\Task\Seed\SeedData;
 use DateTimeImmutable;
 use DNADesign\Elemental\Models\BaseElement;
@@ -35,7 +36,11 @@ use TractorCow\Fluent\State\FluentState;
  *
  *   vendor/bin/sake tasks:villa-seed
  *   vendor/bin/sake tasks:villa-seed --remove-defaults   # also archive installer "About Us" / "Contact Us"
- *   vendor/bin/sake tasks:villa-seed --force             # run again; only missing pages/seasons are added
+ *   vendor/bin/sake tasks:villa-seed --force             # run again; only missing pages/posts/seasons are added
+ *   vendor/bin/sake tasks:villa-seed --rebuild=all       # also REPLACE blocks + SEO fields of existing seeded pages
+ *   vendor/bin/sake tasks:villa-seed --rebuild=home,istria,beaches,blog
+ *
+ * Driving distances are calculated at the end (OSRM); repeat later with tasks:villa-distances.
  */
 class SeedContentTask extends BuildTask
 {
@@ -81,11 +86,21 @@ class SeedContentTask extends BuildTask
     /** @var list<array{0: class-string<DataObject>, 1: int, 2: array<string, array<string, mixed>>}> */
     private array $translations = [];
 
+    /** @var array<string, bool> page keys whose content is replaced (--rebuild) */
+    private array $rebuild = [];
+
+    /** @var array<string, SiteTree> blog post key => post */
+    private array $posts = [];
+
+    /** @var list<array{0: DataObject, 1: string}> record => page/post key for has_one "Article" */
+    private array $articleLinks = [];
+
     public function getOptions(): array
     {
         return [
             new InputOption('force', null, InputOption::VALUE_NONE, 'Run although content exists (adds only what is missing)'),
             new InputOption('remove-defaults', null, InputOption::VALUE_NONE, 'Archive the installer pages "About Us" and "Contact Us"'),
+            new InputOption('rebuild', null, InputOption::VALUE_REQUIRED, 'Replace blocks + SEO fields of existing pages: "all" or keys, e.g. home,villa,location,istria,beaches,blog'),
         ];
     }
 
@@ -100,7 +115,15 @@ class SeedContentTask extends BuildTask
             return Command::FAILURE;
         }
 
-        if (!$input->getOption('force') && BookingPage::get()->exists()) {
+        $rebuild = trim((string) $input->getOption('rebuild'));
+        if ($rebuild !== '') {
+            $keys = $rebuild === 'all'
+                ? array_column(SeedData::pages(), 'key')
+                : array_map('trim', explode(',', $rebuild));
+            $this->rebuild = array_fill_keys(array_filter($keys), true);
+        }
+
+        if (!$input->getOption('force') && !$this->rebuild && BookingPage::get()->exists()) {
             $output->writeln('Content already seeded (a Booking page exists). Use --force to add missing parts.');
 
             return Command::SUCCESS;
@@ -115,17 +138,24 @@ class SeedContentTask extends BuildTask
             $this->lang = $this->langOf($default);
             $this->out->writeln("Default locale: {$default}" . ($this->fluent ? ' (Fluent)' : ''));
 
+            // Distances are calculated in one batch at the end
+            RouteFromVillaExtension::$autoRoute = false;
+
             $this->inLocale($default, function () use ($input): void {
                 if ($input->getOption('remove-defaults')) {
                     $this->removeInstallerPages();
                 }
                 $this->importImages();
                 $this->seedPages();
+                $this->linkArticles();
                 $this->seedSiteConfig();
                 $this->seedSeasons();
                 $this->seedFeeds();
                 $this->publishAll();
+                PlaceDistancesTask::refresh($this->out, true);
             });
+
+            RouteFromVillaExtension::$autoRoute = true;
 
             if ($this->fluent) {
                 foreach (array_keys(static::config()->get('locales')) as $locale) {
@@ -136,6 +166,7 @@ class SeedContentTask extends BuildTask
             }
 
             $this->out->writeln('<info>Done.</info> Replace all [placeholders], example prices and photos in the CMS.');
+            $this->out->writeln('Check villa + place coordinates (Settings → Villa, Places blocks), then: sake tasks:villa-distances --all');
 
             return Command::SUCCESS;
         });
@@ -248,23 +279,31 @@ class SeedContentTask extends BuildTask
             $this->isNew[$def['key']] = $isNew;
             $this->publish[] = $page;
 
-            $this->out->writeln(sprintf('%s page "%s" (%s)', $isNew ? 'Created' : 'Kept', $page->Title, $page->ClassName));
+            $this->out->writeln(sprintf(
+                '%s page "%s" (%s)',
+                $isNew ? 'Created' : (isset($this->rebuild[$def['key']]) ? 'Rebuilt' : 'Kept'),
+                $page->Title,
+                $page->ClassName,
+            ));
         }
 
         // Second pass: blocks/children need all pages to exist (links)
         foreach (SeedData::pages() as $def) {
-            $page = $this->pages[$def['key']] ?? null;
-            if (!$page || empty($this->isNew[$def['key']])) {
+            $key = $def['key'];
+            $page = $this->pages[$key] ?? null;
+            if (!$page) {
                 continue;
             }
+            $build = !empty($this->isNew[$key]) || isset($this->rebuild[$key]);
 
-            if (!empty($def['elements'])) {
+            if ($build && !empty($def['elements'])) {
+                $this->clearElements($page);
                 $this->buildElements($page, SeedData::elements((string) $def['elements']));
             }
             if ($def['type'] === 'blog') {
-                $this->seedBlogPosts($page);
+                $this->seedBlogPosts($page, isset($this->rebuild[$key]));
             }
-            if ($def['type'] === 'form') {
+            if ($def['type'] === 'form' && !empty($this->isNew[$key])) {
                 $this->seedContactForm($page);
             }
         }
@@ -273,6 +312,20 @@ class SeedContentTask extends BuildTask
             $booking = $this->pages['booking'];
             $booking->TermsPageID = $this->pages['terms']->ID;
             $booking->write();
+        }
+    }
+
+    private function clearElements(SiteTree $page): void
+    {
+        if (!$page->hasMethod('ElementalArea')) {
+            return;
+        }
+        $area = $page->ElementalArea();
+        if (!$area || !$area->exists()) {
+            return;
+        }
+        foreach ($area->Elements() as $element) {
+            $element->doArchive();
         }
     }
 
@@ -295,16 +348,27 @@ class SeedContentTask extends BuildTask
             return null;
         }
 
-        $segment = (string) $this->tr($def['URLSegment']);
-        $existing = SiteTree::get()->filter(['URLSegment' => $segment, 'ParentID' => 0])->first();
+        $parentID = 0;
+        if (!empty($def['parent'])) {
+            $parentID = (int) ($this->pages[$def['parent']]->ID ?? 0);
+            if (!$parentID) {
+                $this->out->writeln("<comment>Skipped \"{$def['key']}\": parent \"{$def['parent']}\" missing</comment>");
 
-        $fields = array_filter([
+                return null;
+            }
+        }
+
+        $segment = (string) $this->tr($def['URLSegment']);
+        $existing = SiteTree::get()->filter(['URLSegment' => $segment, 'ParentID' => $parentID])->first();
+
+        $seo = array_filter([
             'Title' => $def['Title'],
             'MenuTitle' => $def['MenuTitle'] ?? null,
-            'URLSegment' => $def['URLSegment'],
             'Content' => $def['Content'] ?? null,
+            'MetaTitle' => $def['MetaTitle'] ?? null,
             'MetaDescription' => $def['MetaDescription'] ?? null,
         ], static fn ($v) => $v !== null);
+        $fields = $seo + ['URLSegment' => $def['URLSegment']];
         $fields['ShowInMenus'] = $def['ShowInMenus'] ?? true;
         $fields['ShowInSearch'] = true;
         $fields['Sort'] = $sort;
@@ -332,11 +396,19 @@ class SeedContentTask extends BuildTask
                 return [$existing, true];
             }
 
+            // --rebuild: refresh titles, text and SEO fields (URL stays)
+            if (isset($this->rebuild[$def['key']])) {
+                if (isset($fields['HeaderImageID'])) {
+                    $seo['HeaderImageID'] = $fields['HeaderImageID'];
+                }
+                $this->apply($existing, $seo);
+            }
+
             return [$existing, false];
         }
 
         /** @var SiteTree $page */
-        $page = $this->createRecord($class, $fields + ['ParentID' => 0]);
+        $page = $this->createRecord($class, $fields + ['ParentID' => $parentID]);
 
         return [$page, true];
     }
@@ -393,7 +465,16 @@ class SeedContentTask extends BuildTask
             foreach ($def['items'] ?? [] as $rows) {
                 [$itemClass, $list] = $rows;
                 foreach ($list as $i => $row) {
-                    $this->createRecord($itemClass, $row + ['ParentID' => $element->ID, 'Sort' => $i + 1]);
+                    $article = $row['article'] ?? null;
+                    $image = $row['image'] ?? null;
+                    unset($row['article'], $row['image']);
+                    if ($image && isset($this->images[$image])) {
+                        $row['ImageID'] = $this->images[$image]->ID;
+                    }
+                    $item = $this->createRecord($itemClass, $row + ['ParentID' => $element->ID, 'Sort' => $i + 1]);
+                    if ($article) {
+                        $this->articleLinks[] = [$item, (string) $article];
+                    }
                 }
             }
 
@@ -420,30 +501,89 @@ class SeedContentTask extends BuildTask
         }
     }
 
-    private function seedBlogPosts(SiteTree $blog): void
+    /**
+     * Creates missing posts (matched by URL segment). With --rebuild=blog existing seeded
+     * posts are updated and the old example posts are archived.
+     */
+    private function seedBlogPosts(SiteTree $blog, bool $rebuild = false): void
     {
         if (!class_exists(self::BLOG_POST_CLASS)) {
             return;
         }
 
+        if ($rebuild) {
+            foreach (SeedData::legacyPostSegments() as $segment) {
+                $old = SiteTree::get()->filter(['ParentID' => $blog->ID, 'URLSegment' => $segment])->first();
+                if ($old) {
+                    $old->doArchive();
+                    $this->out->writeln("  - archived example post /{$segment}");
+                }
+            }
+        }
+
         $categories = [];
         foreach (SeedData::blogPosts() as $i => $def) {
-            $key = (string) $this->tr($def['category']);
-            $categories[$key] ??= $this->createRecord(self::BLOG_CATEGORY_CLASS, ['BlogID' => $blog->ID, 'Title' => $def['category']]);
+            $catKey = (string) $this->tr($def['category']);
+            $categories[$catKey] ??= $this->findCategory($blog, $catKey)
+                ?? $this->createRecord(self::BLOG_CATEGORY_CLASS, ['BlogID' => $blog->ID, 'Title' => $def['category']]);
 
-            $post = $this->createRecord(self::BLOG_POST_CLASS, [
-                'ParentID' => $blog->ID,
+            $segment = (string) $this->tr($def['URLSegment']);
+            $post = SiteTree::get()->filter(['ParentID' => $blog->ID, 'URLSegment' => $segment])->first();
+
+            $fields = [
                 'Title' => $def['Title'],
-                'URLSegment' => $def['URLSegment'],
+                'MetaTitle' => $def['MetaTitle'] ?? null,
+                'MetaDescription' => $def['MetaDescription'] ?? null,
                 'Summary' => $def['Summary'],
                 'Content' => $def['Content'],
-                'PublishDate' => date('Y-m-d H:i:s', DBDatetime::now()->getTimestamp() - ($i + 1) * 86400 * 7),
-                'FeaturedImageID' => $this->images[$def['image']]->ID ?? 0,
-                'ShowInMenus' => false,
-            ]);
-            $post->Categories()->add($categories[$key]);
+            ];
+            if (!empty($def['image']) && isset($this->images[$def['image']])) {
+                $fields['FeaturedImageID'] = $this->images[$def['image']]->ID;
+            }
+            $fields = array_filter($fields, static fn ($v) => $v !== null);
+
+            if ($post) {
+                if ($rebuild) {
+                    $this->apply($post, $fields);
+                    $this->out->writeln('  ~ post "' . $post->Title . '"');
+                }
+            } else {
+                $post = $this->createRecord(self::BLOG_POST_CLASS, $fields + [
+                    'ParentID' => $blog->ID,
+                    'URLSegment' => $def['URLSegment'],
+                    'PublishDate' => date('Y-m-d H:i:s', DBDatetime::now()->getTimestamp() - ($i + 1) * 86400 * 3),
+                    'ShowInMenus' => false,
+                ]);
+                $this->out->writeln('  + post "' . $post->Title . '"');
+            }
+
+            if (!$post->Categories()->byID($categories[$catKey]->ID)) {
+                $post->Categories()->add($categories[$catKey]);
+            }
+            $this->posts[$def['key']] = $post;
             $this->publish[] = $post;
-            $this->out->writeln('  + post "' . $post->Title . '"');
+        }
+    }
+
+    private function findCategory(SiteTree $blog, string $title): ?DataObject
+    {
+        /** @var class-string<DataObject> $class */
+        $class = self::BLOG_CATEGORY_CLASS;
+
+        return $class::get()->filter(['BlogID' => $blog->ID, 'Title' => $title])->first();
+    }
+
+    /**
+     * Places → their article (blog post or page key).
+     */
+    private function linkArticles(): void
+    {
+        foreach ($this->articleLinks as [$record, $key]) {
+            $target = $this->posts[$key] ?? $this->pages[$key] ?? null;
+            if ($target) {
+                $record->ArticleID = $target->ID;
+                $record->write();
+            }
         }
     }
 
@@ -483,6 +623,9 @@ class SeedContentTask extends BuildTask
         $data = SeedData::siteConfig();
         if ($config->Email) {
             unset($data['Email']);
+        }
+        if ((float) $config->Latitude !== 0.0) {
+            unset($data['Latitude'], $data['Longitude']);
         }
 
         foreach (['InquiryPageID' => 'booking', 'ImprintPageID' => 'imprint', 'PrivacyPageID' => 'privacy'] as $field => $key) {
@@ -556,7 +699,7 @@ class SeedContentTask extends BuildTask
                     continue;
                 }
                 foreach ($fields as $field => $values) {
-                    $record->setField($field, $values[$lang] ?? reset($values));
+                    $record->setField($field, $this->resolveLinks($values[$lang] ?? reset($values)));
                 }
                 $record->write();
                 $done++;
@@ -612,7 +755,7 @@ class SeedContentTask extends BuildTask
                 $i18n[$field] = $value;
                 $value = $this->tr($value);
             }
-            $record->setField($field, $value);
+            $record->setField($field, $this->resolveLinks($value));
         }
         $record->write();
 
@@ -621,6 +764,22 @@ class SeedContentTask extends BuildTask
         }
 
         return $record;
+    }
+
+    /**
+     * "{link:beaches}" → "[sitetree_link,id=…]" (localised by Fluent on output).
+     */
+    private function resolveLinks(mixed $value): mixed
+    {
+        if (!is_string($value) || !str_contains($value, '{link:')) {
+            return $value;
+        }
+
+        return preg_replace_callback('/\{link:([a-z0-9_-]+)\}/i', function (array $m): string {
+            $target = $this->pages[$m[1]] ?? $this->posts[$m[1]] ?? null;
+
+            return $target ? '[sitetree_link,id=' . $target->ID . ']' : '#';
+        }, $value);
     }
 
     private function isTranslatable(mixed $value): bool

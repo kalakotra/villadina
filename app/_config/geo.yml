@@ -1,0 +1,12 @@
+---
+Name: villadina-geo
+---
+# Driving distance from the villa (OSRM). Place has the extension built in.
+App\Elements\Items\Distance:
+  extensions:
+    - App\Geo\RouteFromVillaExtension
+
+# Public OSRM demo server – fine for a handful of places; use your own instance for volume.
+App\Geo\RouteService:
+  osrm_url: 'https://router.project-osrm.org'
+  timeout: 8
