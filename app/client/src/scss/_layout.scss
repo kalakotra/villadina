@@ -127,6 +127,8 @@
             transition: transform 0.35s $vd-ease;
         }
 
+        white-space: nowrap;
+
         &:hover,
         &.is-current,
         &.is-section {

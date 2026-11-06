@@ -87,7 +87,8 @@ export async function mountRangePicker(input, opts) {
         altInput: true,
         altFormat: 'd.m.Y',
         inline: !!opts.inline,
-        showMonths: window.innerWidth >= 768 ? 2 : 1,
+        // Two months only if they fit the container (inline calendar sits in a column)
+        showMonths: (opts.inline ? input.parentElement.clientWidth : window.innerWidth) >= 640 ? 2 : 1,
         defaultDate: defaults,
         disable: [isDisabled],
         locale: locale ? { ...locale, rangeSeparator: ' – ' } : { rangeSeparator: ' – ' },

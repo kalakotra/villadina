@@ -96,7 +96,10 @@ form.userform {
     input[type='checkbox'],
     input[type='radio'] {
         @extend .form-check-input;
-        margin-top: 0;
+        flex: 0 0 auto;
+        width: 1.35rem;
+        height: 1.35rem;
+        margin-top: 0.1rem;
     }
 
     .field.checkbox {

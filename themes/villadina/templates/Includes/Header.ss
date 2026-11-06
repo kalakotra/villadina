@@ -12,7 +12,7 @@
                 <% end_if %>
             </a>
 
-            <nav class="d-none d-lg-block" aria-label="<%t VillaDina.MainNavigation 'Main navigation' %>">
+            <nav class="d-none d-xl-block" aria-label="<%t VillaDina.MainNavigation 'Main navigation' %>">
                 <% include Navigation %>
             </nav>
 
@@ -25,7 +25,7 @@
                         <%t VillaDina.CheckAvailability 'Check availability' %>
                     </a>
                 <% end_if %>
-                <button class="vd-header__toggle d-lg-none" type="button"
+                <button class="vd-header__toggle d-xl-none" type="button"
                         data-bs-toggle="offcanvas" data-bs-target="#vd-menu" aria-controls="vd-menu"
                         aria-label="<%t VillaDina.OpenMenu 'Open menu' %>">
                     <span></span><span></span><span></span>

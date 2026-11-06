@@ -14,8 +14,7 @@
 }
 
 .flatpickr-calendar.inline {
-    width: 100%;
-    max-width: 640px;
+    max-width: 100%;
     box-shadow: none;
     border: 1px solid $vd-stone;
 }
@@ -116,8 +115,14 @@
         li {
             display: flex;
             justify-content: space-between;
+            align-items: baseline;
             gap: 1rem;
             padding: 0.4rem 0;
+
+            > :last-child {
+                flex: 0 0 auto;
+                white-space: nowrap;
+            }
         }
 
         .is-muted {

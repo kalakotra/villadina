@@ -61,6 +61,7 @@
 // Header "Book" button keeps contrast on transparent header
 .vd-header .btn-book {
     padding: 0.65rem 1.25rem;
+    white-space: nowrap;
 
     .has-hero .vd-header:not(.is-scrolled) & {
         --bs-btn-bg: #fff;
