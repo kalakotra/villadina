@@ -86,6 +86,11 @@ class PlacesElement extends BaseElement
         return 'Places';
     }
 
+    public function IsFlush(): bool
+    {
+        return false;
+    }
+
     /**
      * Manual order, or nearest first (driving minutes, then straight-line km; unknown last).
      */
